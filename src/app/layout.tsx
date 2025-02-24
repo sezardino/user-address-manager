@@ -1,4 +1,6 @@
+import { IsMobileGuard } from "@/components/guards/is-mobile-guard";
 import "@/styles/index.css";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -27,7 +29,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <TooltipProvider>
+          <IsMobileGuard>{children}</IsMobileGuard>
+        </TooltipProvider>
       </body>
     </html>
   );
