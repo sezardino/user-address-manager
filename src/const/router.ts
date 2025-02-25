@@ -7,10 +7,10 @@ export const ApplicationUrls = Object.freeze({
   home: "/",
   users: {
     index: "/users/",
-    preview: (id: string) => `/users/${id}`,
-    addAddress: (id: string, type: string) =>
+    preview: (id: number) => `/users/${id}`,
+    addAddress: (id: number, type: string) =>
       `/users/${id}/add-address/${type.toLowerCase()}`,
-    editAddress: (id: string, type: string) =>
+    editAddress: (id: number, type: string) =>
       `/users/${id}/edit-address/${type.toLowerCase()}`,
   },
 });

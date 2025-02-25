@@ -8,7 +8,6 @@ import { addressDtoSchema } from "@/schemas/server-actions";
 import { ServerActionResponse } from "@/types/base";
 import { zodValidation } from "@/utils/zod-validation";
 import { revalidatePath } from "next/cache";
-import { redirect, RedirectType } from "next/navigation";
 import { db, schema } from "../../drizzle";
 import { validateAddressExistence } from "./validate-address-existance";
 
@@ -42,8 +41,7 @@ export const addAddressLA = async (
     userId,
   } = validationResponse.data;
 
-  let pathToRevalidate;
-  let pathToRedirect;
+  let success = false;
 
   try {
     const isAddressExistResponse = await validateAddressExistence(
@@ -67,13 +65,14 @@ export const addAddressLA = async (
       validFrom: new Date().toLocaleDateString(),
     });
 
-    pathToRedirect = ApplicationUrls.users.index;
-    pathToRevalidate = ApplicationUrls.users.index;
+    success = true;
   } catch (error) {
     console.log(error);
     return { message: "Something went wrong when try to add new address" };
   }
 
-  if (pathToRevalidate) revalidatePath(pathToRevalidate);
-  if (pathToRedirect) redirect(pathToRedirect, RedirectType.replace);
+  if (success) {
+    revalidatePath(ApplicationUrls.users.index);
+    revalidatePath(ApplicationUrls.users.editAddress(userId, addressType));
+  }
 };

@@ -45,7 +45,6 @@ export const AddressFormDialog = (props: AddressFormDialogProps) => {
             {ADDRESS_FORM_COPY[formType].description}
           </DialogDescription>
         </DialogHeader>
-        {JSON.stringify({ initialAddress })}
         <AddressFormWidget
           formId={formId}
           addressType={addressType}

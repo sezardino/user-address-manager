@@ -2,6 +2,7 @@ import { AddressFormValues } from "@/components/forms/address/address.schema";
 import { ADDRESS_FORM_COPY, AddressFormType } from "@/const/address-form-copy";
 import { AddressType } from "@/const/address-type";
 import { ServerActionResponse } from "@/types/base";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useServerActionHandler } from "./use-server-action-handler";
 
@@ -14,6 +15,7 @@ type Props = {
 
 export const useAddressHandler = (props: Props) => {
   const { addressType, userId, onFormSubmit, formType } = props;
+  const router = useRouter();
 
   return useServerActionHandler({
     action: (values: AddressFormValues) => {
@@ -30,6 +32,7 @@ export const useAddressHandler = (props: Props) => {
     },
     onSuccess: () => {
       toast.success(ADDRESS_FORM_COPY[formType].success);
+      router.back();
     },
     onError: (error) => {
       toast.error(error);

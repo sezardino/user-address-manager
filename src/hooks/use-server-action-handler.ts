@@ -24,13 +24,12 @@ export const useServerActionHandler = <T = void, A = undefined>(
           result !== null &&
           "message" in result
         ) {
-          console.log({ result });
           onError?.(result.message, result.errors);
         } else {
           onSuccess?.(result as T);
         }
       } catch (error) {
-        console.log({ error });
+        console.log(error);
         onError?.(error instanceof Error ? error.message : "Unexpected error");
       } finally {
         onFinally?.();

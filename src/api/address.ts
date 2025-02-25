@@ -28,7 +28,7 @@ export const addressSA = async (
     });
 
     if (!address) return { message: "Address not found" };
-    console.log(address);
+
     return address;
   } catch (error) {
     console.log(error);

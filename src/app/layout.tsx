@@ -3,6 +3,7 @@ import "@/styles/index.css";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
       >
         <TooltipProvider>
           <IsMobileGuard>{children}</IsMobileGuard>
+          <Toaster />
         </TooltipProvider>
       </body>
     </html>

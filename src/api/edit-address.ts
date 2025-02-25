@@ -7,7 +7,6 @@ import { ServerActionResponse } from "@/types/base";
 import { zodValidation } from "@/utils/zod-validation";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { redirect, RedirectType } from "next/navigation";
 import { db, schema } from "../../drizzle";
 import { validateAddressExistence } from "./validate-address-existance";
 
@@ -16,7 +15,17 @@ const validationSchema = addressDtoSchema.and(addressFormSchema);
 export const editAddressSA = async (
   dto: unknown
 ): Promise<ServerActionResponse<void>> => {
-  const validationResponse = zodValidation(validationSchema, dto);
+  if (!(dto instanceof FormData)) return { message: "Invalid data" };
+
+  const validationResponse = zodValidation(validationSchema, {
+    userId: Number(dto.get("userId")),
+    addressType: dto.get("addressType"),
+    postCode: dto.get("postCode"),
+    city: dto.get("city"),
+    countryCode: dto.get("countryCode"),
+    street: dto.get("street"),
+    buildingNumber: dto.get("buildingNumber"),
+  });
 
   if (!validationResponse.success)
     return { message: "Invalid input", errors: validationResponse.errors };
@@ -31,8 +40,7 @@ export const editAddressSA = async (
     userId,
   } = validationResponse.data;
 
-  let pathToRevalidate;
-  let pathToRedirect;
+  let success = false;
 
   try {
     const isAddressExistResponse = await validateAddressExistence(
@@ -59,13 +67,14 @@ export const editAddressSA = async (
         )
       );
 
-    pathToRedirect = ApplicationUrls.users.index;
-    pathToRevalidate = ApplicationUrls.users.index;
+    success = true;
   } catch (error) {
     console.log(error);
     return { message: "Something went wrong when try to add new address" };
   }
 
-  if (pathToRevalidate) revalidatePath(pathToRevalidate);
-  if (pathToRedirect) redirect(pathToRedirect, RedirectType.replace);
+  if (success) {
+    revalidatePath(ApplicationUrls.users.index);
+    revalidatePath(ApplicationUrls.users.editAddress(userId, addressType));
+  }
 };

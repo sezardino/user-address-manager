@@ -72,7 +72,7 @@ export const UserTableActions = (props: UserTableActionsProps) => {
 
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href={ApplicationUrls.users.preview(userId.toString())}>
+            <Link href={ApplicationUrls.users.preview(userId)}>
               <Eye />
               See details
             </Link>
@@ -89,12 +89,12 @@ export const UserTableActions = (props: UserTableActionsProps) => {
                     <DropdownMenuItem key={type.value} asChild>
                       <Link
                         href={ApplicationUrls.users.addAddress(
-                          userId.toString(),
+                          userId,
                           type.value
                         )}
                       >
                         <type.icon />
-                        <span>{type.value}</span>
+                        <span>{type.label}</span>
                       </Link>
                     </DropdownMenuItem>
                   ))}
@@ -114,12 +114,12 @@ export const UserTableActions = (props: UserTableActionsProps) => {
                     <DropdownMenuItem key={type.value} asChild>
                       <Link
                         href={ApplicationUrls.users.editAddress(
-                          userId.toString(),
+                          userId,
                           type.value
                         )}
                       >
                         <type.icon />
-                        <span>{type.value}</span>
+                        <span>{type.label}</span>
                       </Link>
                     </DropdownMenuItem>
                   ))}
