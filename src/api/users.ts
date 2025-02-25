@@ -2,20 +2,32 @@
 
 import { AddressType } from "@/const/address-type";
 import { DEFAULT_PAGE_LIMIT, DEFAULT_PAGE_NUMBER } from "@/const/pagination";
+
 import {
-  UsersListResponse,
-  usersListRequestSchema,
-} from "@/schemas/users-list";
+  paginationRequestSchema,
+  PaginationResponse,
+} from "@/schemas/pagination";
 import { ServerActionResponse } from "@/types/base";
 import { getPaginationData } from "@/utils/pagination";
 import { zodValidation } from "@/utils/zod-validation";
 import { count } from "drizzle-orm";
 import { db, schema } from "../../drizzle";
+import { UserEntity } from "../../drizzle/schema";
+import { UserAddressesExistenceResponse } from "@/types/response";
+
+type UserPickerFields = Pick<
+  UserEntity,
+  "id" | "firstName" | "lastName" | "initials" | "status" | "email"
+>;
+
+type Response = PaginationResponse & {
+  users: (UserPickerFields & UserAddressesExistenceResponse)[];
+};
 
 export const usersListSA = async (
   dto: unknown
-): Promise<ServerActionResponse<UsersListResponse>> => {
-  const validationResponse = zodValidation(usersListRequestSchema, dto);
+): Promise<ServerActionResponse<Response>> => {
+  const validationResponse = zodValidation(paginationRequestSchema, dto);
 
   if (!validationResponse.success)
     return { message: "Invalid input", errors: validationResponse.errors };
@@ -48,23 +60,23 @@ export const usersListSA = async (
       },
     });
 
-    const usersWithAddressCount = users.map(({ addresses, ...user }) => ({
+    const usersWithAddresses = users.map(({ addresses, ...user }) => ({
       ...user,
-      homeAddressesCount: addresses.filter(
+      isHomeAddressExist: !!addresses.filter(
         (a) => a.addressType === AddressType.HOME
       ).length,
-      invoiceAddressesCount: addresses.filter(
+      isInvoiceAddressExist: !!addresses.filter(
         (a) => a.addressType === AddressType.INVOICE
       ).length,
-      postAddressesCount: addresses.filter(
+      isPostAddressExist: !!addresses.filter(
         (a) => a.addressType === AddressType.POST
       ).length,
-      workAddressesCount: addresses.filter(
+      isWorkAddressExist: !!addresses.filter(
         (a) => a.addressType === AddressType.WORK
       ).length,
     }));
 
-    return { meta, users: usersWithAddressCount };
+    return { meta, users: usersWithAddresses };
   } catch (error) {
     console.log(error);
     return { message: "Something went wrong when try to fetch users data" };

@@ -1,33 +1,20 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { DataTable, DataTableProps } from "@/components/ui/data-table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { UserData } from "@/components/ui/user-data";
-import { ApplicationUrls } from "@/const/router";
 import { UserStatus } from "@/const/user-status";
+import { UserAddressesExistenceResponse } from "@/types/response";
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye, MapPinPlus, MoreVertical } from "lucide-react";
-import Link from "next/link";
+import { CheckCircle, XCircle } from "lucide-react";
 import { UserEntity } from "../../../../drizzle/schema";
 import { UserStatusBadge } from "./user-status-badge";
+import { UserTableActions } from "./user-table-actions";
 
 type TableData = Pick<
   UserEntity,
   "email" | "firstName" | "initials" | "lastName" | "status" | "id"
-> & {
-  homeAddressesCount: number;
-  invoiceAddressesCount: number;
-  postAddressesCount: number;
-  workAddressesCount: number;
-};
+> &
+  UserAddressesExistenceResponse;
 
 export type UsersTableProps = Omit<DataTableProps<TableData>, "columns">;
 
@@ -48,64 +35,57 @@ export const UsersTable = (props: UsersTableProps) => {
       ),
     },
     {
-      accessorKey: "homeAddressesCount",
-      header: () => "Home addresses",
-      cell: ({ row }) => row.original.homeAddressesCount,
+      accessorKey: "isHomeAddressExist",
+      header: () => "Home address",
+      cell: ({ row }) =>
+        row.original.isHomeAddressExist ? (
+          <CheckCircle className="size-4 text-green-400" />
+        ) : (
+          <XCircle className="size-4 text-destructive" />
+        ),
     },
     {
-      accessorKey: "invoiceAddressesCount",
-      header: () => "Invoice addresses",
-      cell: ({ row }) => row.original.invoiceAddressesCount,
+      accessorKey: "isInvoiceAddressExist",
+      header: () => "Invoice address",
+      cell: ({ row }) =>
+        row.original.isInvoiceAddressExist ? (
+          <CheckCircle className="size-4 text-green-400" />
+        ) : (
+          <XCircle className="size-4 text-destructive" />
+        ),
     },
     {
-      accessorKey: "postAddressesCount",
-      header: () => "Post addresses",
-      cell: ({ row }) => row.original.postAddressesCount,
+      accessorKey: "isPostAddressExist",
+      header: () => "Post address",
+      cell: ({ row }) =>
+        row.original.isPostAddressExist ? (
+          <CheckCircle className="size-4 text-green-400" />
+        ) : (
+          <XCircle className="size-4 text-destructive" />
+        ),
     },
     {
-      accessorKey: "workAddressesCount",
-      header: () => "Work addresses",
-      cell: ({ row }) => row.original.workAddressesCount,
+      accessorKey: "isWorkAddressExist",
+      header: () => "Work address",
+      cell: ({ row }) =>
+        row.original.isWorkAddressExist ? (
+          <CheckCircle className="size-4 text-green-400" />
+        ) : (
+          <XCircle className="size-4 text-destructive" />
+        ),
     },
     {
       accessorKey: "actions",
       header: () => null,
       cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline">
-              <MoreVertical />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel className="sr-only">
-              Actions on user {row.original.email}
-            </DropdownMenuLabel>
-
-            <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link
-                  href={ApplicationUrls.users.preview(
-                    row.original.id.toString()
-                  )}
-                >
-                  <Eye />
-                  See details
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  href={ApplicationUrls.users.addAddress(
-                    row.original.id.toString()
-                  )}
-                >
-                  <MapPinPlus />
-                  Add address
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <UserTableActions
+          email={row.original.email}
+          userId={row.original.id}
+          isHomeAddressExist={row.original.isHomeAddressExist}
+          isInvoiceAddressExist={row.original.isInvoiceAddressExist}
+          isPostAddressExist={row.original.isPostAddressExist}
+          isWorkAddressExist={row.original.isWorkAddressExist}
+        />
       ),
     },
   ];

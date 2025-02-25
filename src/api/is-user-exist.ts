@@ -3,18 +3,19 @@
 import { ServerActionResponse } from "@/types/base";
 import { eq } from "drizzle-orm";
 import { db, schema } from "../../drizzle";
-import { UserEntity } from "../../drizzle/schema";
 
-type Response = Pick<UserEntity, "id">;
+type Response = { exist: true };
 
-export const userSA = async (
+export const isUserExistSA = async (
   dto: unknown
 ): Promise<ServerActionResponse<Response>> => {
-  if (typeof dto !== "number") return { message: `User not found` };
+  const userId = Number(dto);
+
+  if (typeof userId !== "number") return { message: `User not found` };
 
   try {
     const user = await db.query.users.findFirst({
-      where: eq(schema.users.id, dto),
+      where: eq(schema.users.id, userId),
       columns: {
         id: true,
       },
@@ -22,7 +23,7 @@ export const userSA = async (
 
     if (!user) return { message: "User not found" };
 
-    return user;
+    return { exist: true };
   } catch (error) {
     console.log(error);
     return { message: "Something went wrong when try to fetch users data" };

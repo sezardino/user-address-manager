@@ -1,38 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserData } from "@/components/ui/user-data";
-import { ADDRESS_TYPE_COPY, AddressType } from "@/const/address-type";
+import {
+  ADDRESS_TYPE_COPY,
+  ADDRESS_TYPE_ICONS,
+  ADDRESS_TYPE_ORDER,
+  AddressType,
+} from "@/const/address-type";
 import { UserStatus } from "@/const/user-status";
 import { cn } from "@/utils/shadcn-ui";
 import { TabsContent } from "@radix-ui/react-tabs";
-import { Home } from "lucide-react";
 import { ComponentPropsWithoutRef } from "react";
 import { AddressEntity, UserEntity } from "../../../../drizzle/schema";
 import { AddressPreview } from "../address/address-preview";
 import { UserStatusBadge } from "./user-status-badge";
 
-const ADDRESS_TYPE_TABS = [
-  {
-    value: AddressType.HOME,
-    icon: Home,
-    label: ADDRESS_TYPE_COPY[AddressType.HOME],
-  },
-  {
-    value: AddressType.INVOICE,
-    icon: Home,
-    label: ADDRESS_TYPE_COPY[AddressType.INVOICE],
-  },
-  {
-    value: AddressType.POST,
-    icon: Home,
-    label: ADDRESS_TYPE_COPY[AddressType.POST],
-  },
-  {
-    value: AddressType.WORK,
-    icon: Home,
-    label: ADDRESS_TYPE_COPY[AddressType.WORK],
-  },
-];
+const ADDRESS_TYPE_TABS = ADDRESS_TYPE_ORDER.map((type) => ({
+  value: type,
+  label: ADDRESS_TYPE_COPY[type],
+  icon: ADDRESS_TYPE_ICONS[type],
+}));
 
 export type UserPreviewProps = ComponentPropsWithoutRef<"div"> & {
   user: UserEntity;

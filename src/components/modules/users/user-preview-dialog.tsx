@@ -29,7 +29,7 @@ export const UserPreviewDialog = (props: UserPreviewDialogProps) => {
         <UserPreview {...props} />
 
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button>Close</Button>
           </DialogClose>
         </DialogFooter>

@@ -1,3 +1,5 @@
+import { Briefcase, FileText, Home, LucideIcon, Mailbox } from "lucide-react";
+
 export const AddressType = Object.freeze({
   HOME: "HOME",
   INVOICE: "INVOICE",
@@ -20,3 +22,10 @@ export const ADDRESS_TYPE_ORDER = [
   AddressType.POST,
   AddressType.WORK,
 ];
+
+export const ADDRESS_TYPE_ICONS: Record<AddressType, LucideIcon> = {
+  HOME: Home,
+  INVOICE: FileText,
+  POST: Mailbox,
+  WORK: Briefcase,
+};
