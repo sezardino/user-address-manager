@@ -3,9 +3,11 @@
 import { Badge } from "@/components/ui/badge";
 import { DataTable, DataTableProps } from "@/components/ui/data-table";
 import { UserData } from "@/components/ui/user-data";
+import { ApplicationUrls } from "@/const/router";
 import { USER_STATUS_COPY, UserStatus } from "@/const/user-status";
 import { UserEntity } from "@/types/entity";
 import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
 
 type TableData = Pick<
   UserEntity,
@@ -21,6 +23,7 @@ export type UsersTableProps = Omit<DataTableProps<TableData>, "columns">;
 
 export const UsersTable = (props: UsersTableProps) => {
   const { ...rest } = props;
+  const router = useRouter();
 
   const columns: ColumnDef<TableData>[] = [
     {
@@ -62,6 +65,21 @@ export const UsersTable = (props: UsersTableProps) => {
       accessorKey: "workAddressesCount",
       header: () => "Work addresses",
       cell: ({ row }) => row.original.workAddressesCount,
+    },
+    {
+      accessorKey: "actions",
+      header: () => null,
+      cell: ({ row }) => (
+        <button
+          onClick={() =>
+            router.push(
+              ApplicationUrls.users.addAddress(row.original.id.toString())
+            )
+          }
+        >
+          Add address
+        </button>
+      ),
     },
   ];
 

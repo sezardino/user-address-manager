@@ -1,12 +1,12 @@
 import { Slot } from "@radix-ui/react-slot";
-import { TooltipTrigger } from "@radix-ui/react-tooltip";
+
+import { cn } from "@/utils/shadcn-ui";
 import {
   ComponentPropsWithRef,
   ForwardRefRenderFunction,
   forwardRef,
 } from "react";
-import { Tooltip, TooltipContent } from "./tooltip";
-import { cn } from "@/utils/shadcn-ui";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
 export type TypographyLevel =
   | "h1"
@@ -86,16 +86,14 @@ export const TruncatedTypography = (props: TruncatedTypographyProps) => {
   if (text?.length > ellipsisLength)
     return (
       <Tooltip>
-        <TooltipTrigger asChild className="text-left">
+        <TooltipTrigger asChild className="text-left cursor-pointer">
           <Typography
             {...rest}
             className={cn("line-clamp-1 select-none", className)}
           >{`${text.slice(0, ellipsisLength).trim()}...`}</Typography>
         </TooltipTrigger>
         <TooltipContent asChild>
-          <Typography {...rest} className="text-black">
-            {text}
-          </Typography>
+          <Typography {...rest}>{text}</Typography>
         </TooltipContent>
       </Tooltip>
     );
