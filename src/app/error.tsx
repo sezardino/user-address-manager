@@ -12,7 +12,7 @@ export default function Error(props: ErrorPageProps) {
   const { reset } = props;
 
   return (
-    <main className="container mx-auto h-dvh py-40 flex flex-col items-center justify-center py-40">
+    <main className="container mx-auto h-dvh py-40 flex flex-col items-center justify-center">
       <div className="mt-10 flex flex-col items-center">
         <h2 className="text-2xl font-bold text-center">
           Something went wrong!

@@ -7,7 +7,7 @@ import { ApplicationUrls } from "@/const/router";
 import { USER_STATUS_COPY, UserStatus } from "@/const/user-status";
 import { UserEntity } from "@/types/entity";
 import { ColumnDef } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type TableData = Pick<
   UserEntity,
@@ -23,7 +23,6 @@ export type UsersTableProps = Omit<DataTableProps<TableData>, "columns">;
 
 export const UsersTable = (props: UsersTableProps) => {
   const { ...rest } = props;
-  const router = useRouter();
 
   const columns: ColumnDef<TableData>[] = [
     {
@@ -70,15 +69,11 @@ export const UsersTable = (props: UsersTableProps) => {
       accessorKey: "actions",
       header: () => null,
       cell: ({ row }) => (
-        <button
-          onClick={() =>
-            router.push(
-              ApplicationUrls.users.addAddress(row.original.id.toString())
-            )
-          }
+        <Link
+          href={ApplicationUrls.users.addAddress(row.original.id.toString())}
         >
           Add address
-        </button>
+        </Link>
       ),
     },
   ];
