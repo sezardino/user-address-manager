@@ -1,3 +1,4 @@
+import { addAddressLA } from "@/api/add-address";
 import { isUserExistSA } from "@/api/is-user-exist";
 import { AddressFormSection } from "@/components/modules/address/address-form-section";
 import { ErrorPreview } from "@/components/modules/common/error-preview";
@@ -36,6 +37,8 @@ const AddAddressPage = async (props: Props) => {
       <AddressFormSection
         formType="create"
         addressType={type.toUpperCase() as AddressType}
+        userId={userId}
+        onFormSubmit={addAddressLA}
       />
     </main>
   );

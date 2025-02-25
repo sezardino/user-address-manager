@@ -21,17 +21,20 @@ import {
 import { Input } from "../../ui/input";
 import { addressFormSchema, AddressFormValues } from "./address.schema";
 
-type AddressFormProps = ComponentPropsWithoutRef<"form"> & {
-  onFormSubmit: (values: AddressFormValues) => void;
+export type AddressFormProps = ComponentPropsWithoutRef<"form"> & {
+  onFormSubmit: (values: AddressFormValues) => Promise<void>;
   errors?: string[];
   onFormChange?: (key: keyof AddressFormValues, value: string) => void;
+  initialValues?: AddressFormValues;
 };
 
 export const AddressForm = (props: AddressFormProps) => {
-  const { onFormSubmit, className, onFormChange, ...rest } = props;
+  const { initialValues, onFormSubmit, className, onFormChange, ...rest } =
+    props;
 
   const form = useForm<AddressFormValues>({
     resolver: zodResolver(addressFormSchema),
+    defaultValues: initialValues ? initialValues : undefined,
   });
 
   const onSubmit = (data: AddressFormValues) => {
@@ -96,7 +99,8 @@ export const AddressForm = (props: AddressFormProps) => {
                 <FormControl>
                   <Input
                     {...field}
-                    type="city"
+                    type="text"
+                    name="city"
                     placeholder="New York"
                     onChange={changeHandler("city", field.onChange)}
                   />
@@ -117,7 +121,8 @@ export const AddressForm = (props: AddressFormProps) => {
                 <FormControl>
                   <Input
                     {...field}
-                    type="street"
+                    type="text"
+                    name="street"
                     placeholder="Broadway"
                     onChange={changeHandler("street", field.onChange)}
                   />
@@ -136,7 +141,8 @@ export const AddressForm = (props: AddressFormProps) => {
                 <FormControl>
                   <Input
                     {...field}
-                    type="buildingNumber"
+                    type="text"
+                    name="buildingNumber"
                     placeholder="1"
                     onChange={changeHandler("buildingNumber", field.onChange)}
                   />
@@ -155,7 +161,8 @@ export const AddressForm = (props: AddressFormProps) => {
                 <FormControl>
                   <Input
                     {...field}
-                    type="postCode"
+                    type="text"
+                    name="postCode"
                     placeholder="07008"
                     onChange={changeHandler("postCode", field.onChange)}
                   />

@@ -113,7 +113,7 @@ export const UserTableActions = (props: UserTableActionsProps) => {
                   {addressedToEdit.map((type) => (
                     <DropdownMenuItem key={type.value} asChild>
                       <Link
-                        href={ApplicationUrls.users.addAddress(
+                        href={ApplicationUrls.users.editAddress(
                           userId.toString(),
                           type.value
                         )}

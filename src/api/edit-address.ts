@@ -8,16 +8,13 @@ import { zodValidation } from "@/utils/zod-validation";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect, RedirectType } from "next/navigation";
-import { z } from "zod";
 import { db, schema } from "../../drizzle";
 import { validateAddressExistence } from "./validate-address-existance";
 
 const validationSchema = addressDtoSchema.and(addressFormSchema);
 
-type Dto = z.infer<typeof validationSchema>;
-
 export const editAddressSA = async (
-  dto: Dto
+  dto: unknown
 ): Promise<ServerActionResponse<void>> => {
   const validationResponse = zodValidation(validationSchema, dto);
 

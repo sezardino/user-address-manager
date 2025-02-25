@@ -1,3 +1,4 @@
+import { addAddressLA } from "@/api/add-address";
 import { isUserExistSA } from "@/api/is-user-exist";
 import { AddressFormDialog } from "@/components/modules/address/address-form-dialog";
 import { ErrorPreview } from "@/components/modules/common/error-preview";
@@ -34,7 +35,9 @@ const AddAddressModal = async (props: Props) => {
   return (
     <AddressFormDialog
       formType="create"
+      userId={userId}
       addressType={type.toUpperCase() as AddressType}
+      onFormSubmit={addAddressLA}
     />
   );
 };

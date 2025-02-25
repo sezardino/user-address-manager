@@ -1,4 +1,4 @@
-("use server");
+"use server";
 
 import { ADDRESS_TYPE_COPY } from "@/const/address-type";
 
@@ -9,18 +9,25 @@ import { ServerActionResponse } from "@/types/base";
 import { zodValidation } from "@/utils/zod-validation";
 import { revalidatePath } from "next/cache";
 import { redirect, RedirectType } from "next/navigation";
-import { z } from "zod";
 import { db, schema } from "../../drizzle";
 import { validateAddressExistence } from "./validate-address-existance";
 
 const validationSchema = addressDtoSchema.and(addressFormSchema);
 
-type Dto = z.infer<typeof validationSchema>;
-
 export const addAddressLA = async (
-  dto: Dto
+  dto: unknown
 ): Promise<ServerActionResponse<void>> => {
-  const validationResponse = zodValidation(validationSchema, dto);
+  if (!(dto instanceof FormData)) return { message: "Invalid data" };
+
+  const validationResponse = zodValidation(validationSchema, {
+    userId: Number(dto.get("userId")),
+    addressType: dto.get("addressType"),
+    postCode: dto.get("postCode"),
+    city: dto.get("city"),
+    countryCode: dto.get("countryCode"),
+    street: dto.get("street"),
+    buildingNumber: dto.get("buildingNumber"),
+  });
 
   if (!validationResponse.success)
     return { message: "Invalid input", errors: validationResponse.errors };

@@ -1,6 +1,9 @@
 "use client";
 
-import { AddressForm } from "@/components/forms/address/address";
+import {
+  AddressForm,
+  AddressFormProps,
+} from "@/components/forms/address/address";
 import { AddressFormValues } from "@/components/forms/address/address.schema";
 import { AddressType } from "@/const/address-type";
 import { cn } from "@/utils/shadcn-ui";
@@ -15,14 +18,24 @@ const initialPreview: AddressFormValues = {
   street: "",
 };
 
-export type AddressFormWidgetProps = ComponentPropsWithoutRef<"div"> & {
-  formId: string;
-  addressType: AddressType;
-};
+export type AddressFormWidgetProps = ComponentPropsWithoutRef<"div"> &
+  Pick<AddressFormProps, "onFormSubmit" | "initialValues"> & {
+    formId: string;
+    addressType: AddressType;
+  };
 
 export const AddressFormWidget = (props: AddressFormWidgetProps) => {
-  const { addressType, formId, className, ...rest } = props;
-  const [previewData, setPreview] = useState<AddressFormValues>(initialPreview);
+  const {
+    initialValues,
+    onFormSubmit,
+    addressType,
+    formId,
+    className,
+    ...rest
+  } = props;
+  const [previewData, setPreview] = useState<AddressFormValues>(
+    initialValues ? initialValues : initialPreview
+  );
 
   const changePreviewHandler = useCallback(
     (key: keyof AddressFormValues, value: string) => {
@@ -35,8 +48,9 @@ export const AddressFormWidget = (props: AddressFormWidgetProps) => {
     <div {...rest} className={cn("grid gap-4 py-4", className)}>
       <AddressForm
         id={formId}
-        onFormSubmit={() => {}}
+        onFormSubmit={onFormSubmit}
         onFormChange={changePreviewHandler}
+        initialValues={initialValues}
       />
 
       <AddressPreview address={{ ...previewData, addressType }} />
