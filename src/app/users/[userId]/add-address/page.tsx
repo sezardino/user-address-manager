@@ -1,19 +1,18 @@
 import { userSA } from "@/api/user";
 import { AddressFormSection } from "@/components/modules/address/address-form-section";
 import { Button } from "@/components/ui/button";
+import { AddressType } from "@/const/address-type";
 import { ApplicationUrls } from "@/const/router";
 import Link from "next/link";
 
 type Props = {
-  params: {
-    id: number;
-  };
+  params: Promise<{ userId: number }>;
 };
 
-export const AddAddressPage = async ({ params }: Props) => {
-  const { id } = params;
+const AddAddressPage = async (props: Props) => {
+  const { userId } = await props.params;
 
-  const user = await userSA(id);
+  const user = await userSA(userId);
 
   if (!user)
     return (
@@ -30,7 +29,7 @@ export const AddAddressPage = async ({ params }: Props) => {
 
   return (
     <main className="container mx-auto py-10">
-      <AddressFormSection type="create" />
+      <AddressFormSection formType="create" addressType={AddressType.HOME} />
     </main>
   );
 };

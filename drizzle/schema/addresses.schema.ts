@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { InferSelectModel, relations, sql } from "drizzle-orm";
 import {
   check,
   foreignKey,
@@ -51,3 +51,5 @@ export const addressesRelations = relations(addresses, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export type AddressEntity = InferSelectModel<typeof addresses>;

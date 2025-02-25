@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 export const AddressType = Object.freeze({
   HOME: "HOME",
   INVOICE: "INVOICE",
@@ -16,7 +14,9 @@ export const ADDRESS_TYPE_COPY: Record<AddressType, string> = {
   WORK: "Work",
 };
 
-export const addressTypeSchema = z.enum(
-  [AddressType.HOME, AddressType.INVOICE, AddressType.POST, AddressType.WORK],
-  { required_error: "Required field" }
-);
+export const ADDRESS_TYPE_ORDER = [
+  AddressType.HOME,
+  AddressType.INVOICE,
+  AddressType.POST,
+  AddressType.WORK,
+];

@@ -1,13 +1,15 @@
 "use server";
 
 import { ServerActionResponse } from "@/types/base";
-import { UserEntity } from "@/types/entity";
 import { eq } from "drizzle-orm";
 import { db, schema } from "../../drizzle";
+import { UserEntity } from "../../drizzle/schema";
+
+type Response = Pick<UserEntity, "id">;
 
 export const userSA = async (
   dto: unknown
-): Promise<ServerActionResponse<Pick<UserEntity, "id">>> => {
+): Promise<ServerActionResponse<Response>> => {
   if (typeof dto !== "number") return { message: `User not found` };
 
   try {

@@ -1,9 +1,7 @@
-import { addressTypeSchema } from "@/const/address-type";
 import { POST_CODE_REGEXP } from "@/const/regexp";
 import { z } from "zod";
 
 export const addressFormSchema = z.object({
-  type: addressTypeSchema,
   postCode: z
     .string({ required_error: "Required field" })
     .regex(POST_CODE_REGEXP),

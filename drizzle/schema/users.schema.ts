@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { InferSelectModel, relations, sql } from "drizzle-orm";
 import {
   check,
   pgTable,
@@ -37,3 +37,5 @@ export const users = pgTable(
 export const usersRelations = relations(users, ({ many }) => ({
   addresses: many(addresses),
 }));
+
+export type UserEntity = InferSelectModel<typeof users>;

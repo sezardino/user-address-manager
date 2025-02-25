@@ -1,5 +1,5 @@
-import { UserEntity } from "@/types/entity";
 import { z } from "zod";
+import { UserEntity } from "../../drizzle/schema";
 import { paginationRequestSchema, PaginationResponse } from "./pagination";
 
 export const usersListRequestSchema = paginationRequestSchema;

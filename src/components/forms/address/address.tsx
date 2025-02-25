@@ -5,14 +5,6 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ADDRESS_TYPE_COPY, AddressType } from "@/const/address-type";
 import { cn } from "@/utils/shadcn-ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChangeEvent, ComponentPropsWithoutRef } from "react";
@@ -34,11 +26,6 @@ type AddressFormProps = ComponentPropsWithoutRef<"form"> & {
   errors?: string[];
   onFormChange?: (key: keyof AddressFormValues, value: string) => void;
 };
-
-const ADDRESS_TYPE_SELECT_ITEMS = Object.values(AddressType).map((type) => ({
-  value: type,
-  label: ADDRESS_TYPE_COPY[type],
-}));
 
 export const AddressForm = (props: AddressFormProps) => {
   const { onFormSubmit, className, onFormChange, ...rest } = props;
@@ -75,34 +62,6 @@ export const AddressForm = (props: AddressFormProps) => {
         className={cn("space-y-4 md:space-y-6", className)}
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Address Type</FormLabel>
-              <Select
-                onValueChange={changeValueHandler("type", field.onChange)}
-                defaultValue={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select type of address" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {ADDRESS_TYPE_SELECT_ITEMS.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>
-                      {item.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <div className="grid gap-2 grid-cols-[auto,1fr]">
           <FormField
             control={form.control}

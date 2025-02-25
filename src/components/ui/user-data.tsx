@@ -1,8 +1,8 @@
-import { UserEntity } from "@/types/entity";
 import { getAvatarFallback } from "@/utils/get-avatar-fallback";
 import { cn } from "@/utils/shadcn-ui";
 
 import { ComponentPropsWithoutRef } from "react";
+import { UserEntity } from "../../../drizzle/schema";
 import { Avatar, AvatarFallback } from "./avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 import { TruncatedTypography } from "./typography";

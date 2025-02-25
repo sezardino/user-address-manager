@@ -1,13 +1,23 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { DataTable, DataTableProps } from "@/components/ui/data-table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { UserData } from "@/components/ui/user-data";
 import { ApplicationUrls } from "@/const/router";
-import { USER_STATUS_COPY, UserStatus } from "@/const/user-status";
-import { UserEntity } from "@/types/entity";
+import { UserStatus } from "@/const/user-status";
 import { ColumnDef } from "@tanstack/react-table";
+import { Eye, MapPinPlus, MoreVertical } from "lucide-react";
 import Link from "next/link";
+import { UserEntity } from "../../../../drizzle/schema";
+import { UserStatusBadge } from "./user-status-badge";
 
 type TableData = Pick<
   UserEntity,
@@ -34,15 +44,7 @@ export const UsersTable = (props: UsersTableProps) => {
       accessorKey: "status",
       header: () => "Status",
       cell: ({ row }) => (
-        <Badge
-          variant={
-            row.original.status === UserStatus.INACTIVE
-              ? "destructive"
-              : "secondary"
-          }
-        >
-          {USER_STATUS_COPY[row.original.status as UserStatus]}
-        </Badge>
+        <UserStatusBadge status={row.original.status as UserStatus} />
       ),
     },
     {
@@ -69,11 +71,41 @@ export const UsersTable = (props: UsersTableProps) => {
       accessorKey: "actions",
       header: () => null,
       cell: ({ row }) => (
-        <Link
-          href={ApplicationUrls.users.addAddress(row.original.id.toString())}
-        >
-          Add address
-        </Link>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="icon" variant="outline">
+              <MoreVertical />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuLabel className="sr-only">
+              Actions on user {row.original.email}
+            </DropdownMenuLabel>
+
+            <DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <Link
+                  href={ApplicationUrls.users.preview(
+                    row.original.id.toString()
+                  )}
+                >
+                  <Eye />
+                  See details
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href={ApplicationUrls.users.addAddress(
+                    row.original.id.toString()
+                  )}
+                >
+                  <MapPinPlus />
+                  Add address
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ),
     },
   ];

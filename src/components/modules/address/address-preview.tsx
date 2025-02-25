@@ -1,37 +1,66 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TruncatedTypography } from "@/components/ui/typography";
-import { AddressType } from "@/const/address-type";
 import { cn } from "@/utils/shadcn-ui";
-import { Building, Flag, LucideIcon, Mail, Map, MapPin } from "lucide-react";
+import {
+  Building,
+  Flag,
+  LucideIcon,
+  Mail,
+  Map,
+  MapPin,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { ComponentPropsWithoutRef } from "react";
+import { AddressEntity } from "../../../../drizzle/schema";
+
+type ComponentAddress = Pick<
+  AddressEntity,
+  | "addressType"
+  | "buildingNumber"
+  | "city"
+  | "countryCode"
+  | "postCode"
+  | "street"
+>;
 
 export type AddressPreviewProps = ComponentPropsWithoutRef<"div"> & {
-  type: AddressType;
-  city: string;
-  countryCode: string;
-  street: string;
-  buildingNumber: string;
-  postCode: string;
+  address: ComponentAddress;
+  onDelete?: () => void;
+  onEdit?: () => void;
 };
 
 export const AddressPreview = (props: AddressPreviewProps) => {
-  const {
-    type,
-    city,
-    countryCode,
-    street,
-    buildingNumber,
-    postCode,
-    className,
-    ...rest
-  } = props;
+  const { address, onDelete, onEdit, className, ...rest } = props;
+  const { addressType, city, countryCode, street, buildingNumber, postCode } =
+    address;
 
   return (
     <Card {...rest} className={cn("w-full", className)}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Address</CardTitle>
-        {type && <Badge variant="outline">{type}</Badge>}
+        <CardTitle className="text-sm font-medium">
+          <Badge variant="outline">{addressType}</Badge>
+        </CardTitle>
+        {(onDelete || onEdit) && (
+          <div className="flex items-center gap-2">
+            {onEdit && (
+              <Button size="icon" aria-label="Edit address">
+                <Pencil />
+              </Button>
+            )}
+            {onDelete && (
+              <Button
+                size="icon"
+                variant={"destructive"}
+                aria-label="Delete address"
+              >
+                <Trash2 />
+              </Button>
+            )}
+          </div>
+        )}
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-2 gap-y-4">

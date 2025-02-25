@@ -1,5 +1,5 @@
-import { userSA } from "@/api/user";
-import { AddressFormDialog } from "@/components/modules/address/address-form-dialog";
+import { userWithAddressesSA } from "@/api/user-with-addresses";
+import { UserPreviewDialog } from "@/components/modules/users/user-preview-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DialogContent,
@@ -8,29 +8,25 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ServerDialog } from "@/components/ui/server-dialog";
-import { AddressType } from "@/const/address-type";
-import { DialogClose, DialogDescription } from "@radix-ui/react-dialog";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 type Props = {
   params: Promise<{ userId: number }>;
 };
 
-const AddAddressModal = async (props: Props) => {
+const UserDetailsModal = async (props: Props) => {
   const { userId } = await props.params;
 
-  const user = await userSA(userId);
+  const userResponse = await userWithAddressesSA(userId);
 
-  if (!user)
+  if ("message" in userResponse)
     return (
       <ServerDialog>
         <DialogContent className="min-h-[250px]">
           <DialogHeader>
             <DialogTitle className="text-2xl text-center">
-              User not found
+              {userResponse.message}
             </DialogTitle>
-            <DialogDescription className="text-center text-muted-foreground">
-              User with provided id not found
-            </DialogDescription>
           </DialogHeader>
           <DialogFooter className="sm:justify-center">
             <DialogClose asChild>
@@ -41,7 +37,18 @@ const AddAddressModal = async (props: Props) => {
       </ServerDialog>
     );
 
-  return <AddressFormDialog formType="create" addressType={AddressType.HOME} />;
+  const { homeAddress, workAddress, invoiceAddress, postAddress, ...restUser } =
+    userResponse;
+
+  return (
+    <UserPreviewDialog
+      user={restUser}
+      homeAddress={homeAddress}
+      workAddress={workAddress}
+      invoiceAddress={invoiceAddress}
+      postAddress={postAddress}
+    />
+  );
 };
 
-export default AddAddressModal;
+export default UserDetailsModal;

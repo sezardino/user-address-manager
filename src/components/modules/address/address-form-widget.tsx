@@ -13,15 +13,15 @@ const initialPreview: AddressFormValues = {
   countryCode: "",
   postCode: "",
   street: "",
-  type: "" as AddressType,
 };
 
 export type AddressFormWidgetProps = ComponentPropsWithoutRef<"div"> & {
   formId: string;
+  addressType: AddressType;
 };
 
 export const AddressFormWidget = (props: AddressFormWidgetProps) => {
-  const { formId, className, ...rest } = props;
+  const { addressType, formId, className, ...rest } = props;
   const [previewData, setPreview] = useState<AddressFormValues>(initialPreview);
 
   const changePreviewHandler = useCallback(
@@ -39,7 +39,7 @@ export const AddressFormWidget = (props: AddressFormWidgetProps) => {
         onFormChange={changePreviewHandler}
       />
 
-      <AddressPreview {...previewData} />
+      <AddressPreview address={{ ...previewData, addressType }} />
     </div>
   );
 };
