@@ -8,12 +8,12 @@ import {
   PaginationResponse,
 } from "@/schemas/pagination";
 import { ServerActionResponse } from "@/types/base";
+import { UserAddressesExistenceResponse } from "@/types/response";
 import { getPaginationData } from "@/utils/pagination";
 import { zodValidation } from "@/utils/zod-validation";
 import { count } from "drizzle-orm";
 import { db, schema } from "../../drizzle";
 import { UserEntity } from "../../drizzle/schema";
-import { UserAddressesExistenceResponse } from "@/types/response";
 
 type UserPickerFields = Pick<
   UserEntity,
@@ -35,11 +35,11 @@ export const usersListSA = async (
   const { limit = DEFAULT_PAGE_LIMIT, page = DEFAULT_PAGE_NUMBER } =
     validationResponse.data;
 
-  const [usersCount] = await db.select({ count: count() }).from(schema.users);
-
-  const { offset, meta } = getPaginationData(usersCount.count, page, limit);
-
   try {
+    const [usersCount] = await db.select({ count: count() }).from(schema.users);
+
+    const { offset, meta } = getPaginationData(usersCount.count, page, limit);
+
     const users = await db.query.users.findMany({
       limit,
       offset,
