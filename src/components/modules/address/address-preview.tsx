@@ -3,17 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TruncatedTypography } from "@/components/ui/typography";
 import { cn } from "@/utils/shadcn-ui";
-import {
-  Building,
-  Flag,
-  LucideIcon,
-  Mail,
-  Map,
-  MapPin,
-  Pencil,
-  Trash2,
-} from "lucide-react";
-import { ComponentPropsWithoutRef } from "react";
+import { Building, Flag, LucideIcon, Mail, Map, MapPin } from "lucide-react";
+import Link from "next/link";
+import { ComponentPropsWithoutRef, Fragment } from "react";
 import { AddressEntity } from "../../../../drizzle/schema";
 
 type ComponentAddress = Pick<
@@ -26,14 +18,20 @@ type ComponentAddress = Pick<
   | "street"
 >;
 
+type Action = {
+  label: string;
+  icon: LucideIcon;
+  href?: string;
+  onClick?: () => void;
+};
+
 export type AddressPreviewProps = ComponentPropsWithoutRef<"div"> & {
   address: ComponentAddress;
-  onDelete?: () => void;
-  onEdit?: () => void;
+  actions?: Action[];
 };
 
 export const AddressPreview = (props: AddressPreviewProps) => {
-  const { address, onDelete, onEdit, className, ...rest } = props;
+  const { address, actions, className, ...rest } = props;
   const { addressType, city, countryCode, street, buildingNumber, postCode } =
     address;
 
@@ -43,22 +41,29 @@ export const AddressPreview = (props: AddressPreviewProps) => {
         <CardTitle className="text-sm font-medium">
           <Badge variant="outline">{addressType}</Badge>
         </CardTitle>
-        {(onDelete || onEdit) && (
+        {actions?.length && (
           <div className="flex items-center gap-2">
-            {onEdit && (
-              <Button size="icon" aria-label="Edit address">
-                <Pencil />
-              </Button>
-            )}
-            {onDelete && (
-              <Button
-                size="icon"
-                variant={"destructive"}
-                aria-label="Delete address"
-              >
-                <Trash2 />
-              </Button>
-            )}
+            {actions.map((action) => (
+              <Fragment key={action.label}>
+                {!!action.href && (
+                  <Button size="icon" aria-label={action.label}>
+                    <Link href={action.href}>
+                      <action.icon />
+                    </Link>
+                  </Button>
+                )}
+
+                {!!action.onClick && (
+                  <Button
+                    size="icon"
+                    onClick={action.onClick}
+                    aria-label={action.label}
+                  >
+                    <action.icon />
+                  </Button>
+                )}
+              </Fragment>
+            ))}
           </div>
         )}
       </CardHeader>

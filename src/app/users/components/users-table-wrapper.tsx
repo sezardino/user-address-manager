@@ -1,3 +1,4 @@
+import { deleteAddressSA } from "@/api/delete-address";
 import { usersListSA } from "@/api/users";
 import { UsersTable } from "@/components/modules/users/users-table";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,7 @@ export const UsersTableWrapper = async (props: UsersTableWrapperProps) => {
 
   return (
     <section {...rest} className={cn(className)}>
-      <UsersTable data={usersData.users} />
+      <UsersTable data={usersData.users} onDeleteAddress={deleteAddressSA} />
 
       <footer className="mt-5 justify-end flex items-center gap-4">
         {hasPrevPage ? (

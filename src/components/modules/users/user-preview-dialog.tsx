@@ -20,8 +20,8 @@ export const UserPreviewDialog = (props: UserPreviewDialogProps) => {
     <ServerDialog>
       <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>User preview</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-2xl font-bold">User preview</DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
             Here you can found basic user data and his addresses
           </DialogDescription>
         </DialogHeader>

@@ -18,12 +18,13 @@ import {
 } from "@/const/address-type";
 import { ApplicationUrls } from "@/const/router";
 import { UserAddressesExistenceResponse } from "@/types/response";
-import { Eye, MoreVertical, Pencil, Plus } from "lucide-react";
+import { Eye, MoreVertical, Pencil, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 
 export type UserTableActionsProps = UserAddressesExistenceResponse & {
   userId: number;
   email: string;
+  onDeleteClick: (addressType: AddressType) => void;
 };
 
 export const UserTableActions = (props: UserTableActionsProps) => {
@@ -34,6 +35,7 @@ export const UserTableActions = (props: UserTableActionsProps) => {
     isInvoiceAddressExist,
     isPostAddressExist,
     isWorkAddressExist,
+    onDeleteClick,
   } = props;
 
   const createdAddresses: Record<AddressType, boolean> = {
@@ -76,6 +78,10 @@ export const UserTableActions = (props: UserTableActionsProps) => {
               <Eye />
               See details
             </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Pencil />
+            Edit user
           </DropdownMenuItem>
           {!!addressedToCreate.length && (
             <DropdownMenuSub>
@@ -121,6 +127,27 @@ export const UserTableActions = (props: UserTableActionsProps) => {
                         <type.icon />
                         <span>{type.label}</span>
                       </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+          )}
+          {!!addressedToEdit.length && (
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="text-destructive">
+                <Trash />
+                <span>Delete address</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  {addressedToEdit.map((type) => (
+                    <DropdownMenuItem
+                      key={type.value}
+                      onClick={() => onDeleteClick(type.value as AddressType)}
+                    >
+                      <type.icon />
+                      <span>{type.label}</span>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuSubContent>

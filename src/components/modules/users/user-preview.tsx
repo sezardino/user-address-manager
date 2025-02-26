@@ -7,9 +7,12 @@ import {
   ADDRESS_TYPE_ORDER,
   AddressType,
 } from "@/const/address-type";
+import { ApplicationUrls } from "@/const/router";
 import { UserStatus } from "@/const/user-status";
 import { cn } from "@/utils/shadcn-ui";
 import { TabsContent } from "@radix-ui/react-tabs";
+import { Pencil } from "lucide-react";
+import Link from "next/link";
 import { ComponentPropsWithoutRef } from "react";
 import { AddressEntity, UserEntity } from "../../../../drizzle/schema";
 import { AddressPreview } from "../address/address-preview";
@@ -49,8 +52,12 @@ export const UserPreview = (props: UserPreviewProps) => {
 
   return (
     <section {...rest} className={cn("flex flex-col gap-2", className)}>
-      <header>
+      <header className="flex items-center justify-between">
         <UserData user={user} />
+        <Button>
+          <Pencil className="mr-2" />
+          Edit user
+        </Button>
       </header>
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
@@ -84,11 +91,32 @@ export const UserPreview = (props: UserPreviewProps) => {
 
           return (
             <TabsContent key={tab.value} value={tab.value}>
-              {!!address && <AddressPreview address={address} />}
+              {!!address && (
+                <AddressPreview
+                  address={address}
+                  actions={[
+                    {
+                      icon: Pencil,
+                      label: "Edit address",
+                      href: ApplicationUrls.users.editAddress(
+                        user.id,
+                        tab.value
+                      ),
+                    },
+                  ]}
+                />
+              )}
               {!address && (
                 <div className=" py-10 h-full flex items-center justify-center grow">
-                  <Button variant="secondary">
-                    Add {ADDRESS_TYPE_COPY[tab.value]} address
+                  <Button variant="secondary" asChild>
+                    <Link
+                      href={ApplicationUrls.users.addAddress(
+                        user.id,
+                        tab.value
+                      )}
+                    >
+                      Add {ADDRESS_TYPE_COPY[tab.value]} address
+                    </Link>
                   </Button>
                 </div>
               )}

@@ -43,8 +43,10 @@ const UserDetailsModal = async (props: Props) => {
   return (
     <main className="container mx-auto py-10">
       <header>
-        <h1>User details</h1>
-        <p>Here you can found basic user data and his addresses</p>
+        <h1 className="text-2xl font-bold">User details</h1>
+        <p className="text-sm text-muted-foreground">
+          Here you can found basic user data and his addresses
+        </p>
       </header>
 
       <UserPreview

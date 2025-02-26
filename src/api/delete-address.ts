@@ -1,4 +1,4 @@
-("use server");
+"use server";
 
 import { ApplicationUrls } from "@/const/router";
 import { addressDtoSchema } from "@/schemas/server-actions";

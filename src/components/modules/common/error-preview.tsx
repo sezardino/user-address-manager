@@ -28,7 +28,7 @@ export const ErrorPreview = (props: ErrorPreviewProps) => {
           <DialogHeader>
             <DialogTitle className="text-2xl text-center">{title}</DialogTitle>
           </DialogHeader>
-          {errors?.length && (
+          {!!errors?.length && (
             <ul className="flex flex-col justify-center gap-1">
               {errors.map((e, i) => (
                 <li key={i} className="text-center">

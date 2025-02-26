@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 type Args<Response, Arguments = undefined> = {
   action: (args: Arguments) => Promise<ServerActionResponse<Response>>;
-  onSuccess?: (result: Response) => void;
+  onSuccess?: (result: Response, args: Arguments) => void;
   onError?: (errorMessage: string, zodErrors?: ZodFormatError[]) => void;
   onFinally?: () => void;
 };
@@ -26,7 +26,7 @@ export const useServerActionHandler = <T = void, A = undefined>(
         ) {
           onError?.(result.message, result.errors);
         } else {
-          onSuccess?.(result as T);
+          onSuccess?.(result as T, actionArgs);
         }
       } catch (error) {
         console.log(error);
